@@ -53,13 +53,21 @@ This repository is organized into three Jupyter notebooks that demonstrate a cle
 
 ## Results & Analysis
 
+The project successfully demonstrates the capabilities of PINNs for both forward and inverse problems in mechanical dynamics.
+
+### Forward Problem: Solving a Known System
+
+First, the model was tasked with solving the simple harmonic oscillator equation where the physical parameters were known. The animation below shows the network's prediction converging to the true analytical solution, validating the core methodology.
+
+![Animation of the PINN learning the simple harmonic oscillator solution](assets/forward_animation.gif)
+
+### Inverse Problem: Discovering Unknown Physics
+
 The primary result of this project is the successful implementation of the inverse problem. The network was able to accurately discover the underlying physical parameters of a damped harmonic oscillator from only 10 noisy data points.
 
-### Inverse Problem: Learning the Physics
+The animation below shows the network's prediction (blue dashed line) converging to the true analytical solution (red line) while simultaneously fitting the sparse experimental data (green dots) and learning the system parameters.
 
-The animation below shows the network's prediction (blue dashed line) converging to the true analytical solution (red line) while simultaneously fitting the sparse experimental data (green dots).
-
-*(You would replace this with the GIF you create from the saved frames)*
+![Animation of the PINN learning the damped oscillator solution](assets/inverse_animation.gif)
 
 **Final Learned Parameters:**
 * **True m:** 1.00, **Learned m:** 1.002
@@ -68,7 +76,7 @@ The animation below shows the network's prediction (blue dashed line) converging
 
 ### Challenges and Solutions
 
-A key challenge encountered was the network converging to a "trivial" solution where it learned `m=0` and `k=0`. This satisfies the ODE but is physically meaningless. This was resolved by having the network learn the logarithm of the parameters (`log(m)`, `log(k)`) and then taking the exponential to recover the always-positive physical values. This constrained the optimization to a physically plausible domain and led to successful convergence.
+A key challenge encountered during the inverse problem was the network converging to a "trivial" solution where it learned `m=0` and `k=0`. This satisfies the ODE but is physically meaningless. This was resolved by reparameterizing the problem: the network was trained to learn the logarithm of the parameters (`log(m)`, `log(k)`), and the exponential was taken to recover the always-positive physical values. This constrained the optimization to a physically plausible domain and led to successful convergence.
 
 ---
 
